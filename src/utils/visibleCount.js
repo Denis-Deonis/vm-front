@@ -7,7 +7,7 @@ export const getVisibleCount = () => {
     return {loadCards: 8, moreCards: 2}
   } else if (width > 767) {
     return {loadCards: 8, moreCards: 2}
-  }else if (width > 1279) {
+  }else if (width > 1223) {
     return {loadCards: 12, moreCards: 3}
   }
 }
