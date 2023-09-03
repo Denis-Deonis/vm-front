@@ -1,4 +1,3 @@
-
 export const getVisibleCount = () => {
   const width = window.innerWidth;
   if (width < 653) {

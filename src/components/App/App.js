@@ -29,31 +29,26 @@ function App() {
   const handleToggleShortSavedMovie = (value) => setToggleShortSavedMovie(value);
   const handleToggleIsLoad = (value) => setIsLoading(value);
   const [searchQuery, setSearchQuery] = useState(null);
-  const pathname = window.location.pathname;
+  const jwt = localStorage.getItem('jwt');
+  const path = window.location.pathname;
 
   useEffect(() => {
-    tokenVerification();
-  }, []);
-
-  async function tokenVerification() {
-    const jwt = localStorage.getItem('jwt');
     if (jwt) {
       setIsLoading(true);
-      try {
-        const res = mainApi.getUserInfo();
-        if (res) {
-          setIsLoggedIn(true);
-          navigate(pathname);
-        }
-      } catch (err) {
-        console.log(err);
+      mainApi.getUserInfo()
+      .then(() => {
+          setIsLoggedIn(true)
+          navigate(path)
+      })
+      .catch(() => {
         handelClearAllValues()
         navigate('/')
-      } finally {
-        setIsLoading(false);
-      }
+        mainApi.getLogoutUser()
+      })
+      .finally(() => setIsLoading(false));
     }
-  }
+  }, [jwt]);
+
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -201,6 +196,7 @@ function App() {
                   navigate={navigate}
                   requestError={requestError}
                   setRequestError={setRequestError}
+                  setClearValues={handelClearAllValues}
                 />
               ) : (
                 <Navigate to="/movies" />
